@@ -21,15 +21,49 @@ chmod 600 ~/.config/github-monitor/config.toml
 
 The file stores the token in plain text: keep its permissions at `600`. Changes require restarting the application.
 
-## Installation and usage
+## Installation
+
+Install it straight from GitHub with [pipx](https://pipx.pypa.io) or [uv](https://docs.astral.sh/uv/); either one puts `github-monitor` in `~/.local/bin`:
 
 ```sh
+pipx install git+https://github.com/arrase/github-monitor.git
+# or
+uv tool install git+https://github.com/arrase/github-monitor.git
+```
+
+Upgrade with `pipx upgrade github-monitor` or `uv tool upgrade github-monitor`, and remove with `pipx uninstall github-monitor` or `uv tool uninstall github-monitor`.
+
+Then create the [configuration file](#configuration) and run `github-monitor`.
+
+## Start on login
+
+Desktop environments that follow the XDG autostart specification (KDE Plasma, GNOME, Xfce…) start every `.desktop` file found in `~/.config/autostart` when you log in. Create one for github-monitor (it records the absolute path of the installed command, because `~/.local/bin` is not always in `PATH` that early in the session):
+
+```sh
+mkdir -p ~/.config/autostart
+cat > ~/.config/autostart/github-monitor.desktop <<EOF
+[Desktop Entry]
+Type=Application
+Name=GitHub Monitor
+Comment=Monitor GitHub pull requests and issues from the system tray
+Exec=$(command -v github-monitor)
+Terminal=false
+EOF
+```
+
+It takes effect at your next login. To disable it, delete `~/.config/autostart/github-monitor.desktop` (on KDE Plasma you can also manage it in System Settings → Autostart).
+
+## Development
+
+```sh
+git clone https://github.com/arrase/github-monitor.git
+cd github-monitor
 python3 -m venv .venv
-.venv/bin/pip install -e .
+.venv/bin/pip install -e .[dev]
 .venv/bin/github-monitor
 ```
 
-Tests: `.venv/bin/pip install -e .[dev] && .venv/bin/pytest`.
+Tests: `.venv/bin/pytest`.
 
 ## What needs attention
 

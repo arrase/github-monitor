@@ -33,8 +33,9 @@
 - [x] 5.4 Delegate the Spanish translation of `es/LC_MESSAGES/github_monitor.po` to a flash-model subagent, review the result, and compile it with `pybabel compile`; verify `LANGUAGE=es` shows Spanish strings and `LANGUAGE=de` shows English ones
 - [x] 5.5 Add `tests/test_i18n.py`: Spanish catalog covers every template message with no fuzzy or empty entries, `LANGUAGE=es` yields Spanish and an unsupported locale yields English, singular/plural notification titles; verify with `.venv/bin/pytest tests/test_i18n.py`
 - [x] 5.6 Rewrite `README.md` and `config.example.toml` comments in English and add a "Translations" section documenting the extract/update/translate/compile workflow; verify the documented commands run as written
+- [x] 5.7 Document in `README.md` installing straight from GitHub with `pipx` / `uv tool` and starting on login via an XDG autostart `.desktop` entry; verify `uv tool install git+https://github.com/arrase/github-monitor.git` works and the generated entry passes `desktop-file-validate`
 
 ## 6. Integration verification
 
 - [x] 6.1 Run the full `.venv/bin/pytest` suite and verify every test passes
-- [ ] 6.2 Start `github-monitor` with a real configuration including a public, a private and a non-existent repository, under both `LANG=es_ES.UTF-8` and `LANG=en_US.UTF-8`; verify the red icon with a number, translated tooltip and menu, submenus, opening a URL in the browser, left-click refresh and the notification when a new issue is opened
+- [x] 6.2 Start `github-monitor` with a real configuration including a public, a private and a non-existent repository, under both `LANG=es_ES.UTF-8` and `LANG=en_US.UTF-8`; verify the red icon with a number, translated tooltip and menu, submenus, opening a URL in the browser, left-click refresh and the notification when a new issue is opened
