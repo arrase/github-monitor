@@ -1,19 +1,23 @@
 import threading
 from datetime import datetime
+from pathlib import Path
 
 from PyQt6.QtCore import QRectF, Qt, QTimer, QUrl, pyqtSignal
-from PyQt6.QtGui import QColor, QDesktopServices, QFont, QIcon, QPainter, QPixmap
+from PyQt6.QtGui import QColor, QDesktopServices, QFont, QGuiApplication, QIcon, QPainter, QPalette, QPixmap
+from PyQt6.QtSvg import QSvgRenderer
 from PyQt6.QtWidgets import QApplication, QMenu, QSystemTrayIcon
 
 from github_monitor.config import Config
 from github_monitor.github import Item, RepoStatus, create_session, fetch_all
 from github_monitor.i18n import _, ngettext
 
-GREY = "#9e9e9e"
-GREEN = "#2e7d32"
 ORANGE = "#ef6c00"
 RED = "#c62828"
 ICON_SIZE = 64
+BADGE_HEIGHT = 34
+BADGE_PADDING = 12
+LOADING_OPACITY = 0.4
+LOGO_PATH = Path(__file__).parent / "assets" / "github-mark.svg"
 
 
 def badge_text(total: int, has_error: bool) -> str:
@@ -24,10 +28,11 @@ def badge_text(total: int, has_error: bool) -> str:
     return "!" if has_error else ""
 
 
-def state_color(total: int, has_error: bool) -> str:
+def state_color(total: int, has_error: bool) -> str | None:
+    """Badge colour, or None when there is nothing to report."""
     if has_error:
         return RED
-    return ORANGE if total else GREEN
+    return ORANGE if total else None
 
 
 def tooltip_text(statuses: list[RepoStatus], updated_at: datetime) -> str:
@@ -51,20 +56,42 @@ def notification_title(count: int) -> str:
     return ngettext("{count} new pending item on GitHub", "{count} new pending items on GitHub", count).format(count=count)
 
 
-def render_icon(color: str, text: str) -> QIcon:
+def logo_pixmap() -> QPixmap:
+    pixmap = QPixmap(ICON_SIZE, ICON_SIZE)
+    pixmap.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(pixmap)
+    QSvgRenderer(str(LOGO_PATH)).render(painter, QRectF(0, 0, ICON_SIZE, ICON_SIZE))
+    # SourceIn keeps the logo's shape and repaints it in the theme text colour.
+    painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
+    painter.fillRect(pixmap.rect(), QApplication.palette().color(QPalette.ColorRole.WindowText))
+    painter.end()
+    return pixmap
+
+
+def draw_badge(painter: QPainter, text: str, color: str):
+    font = QFont()
+    font.setBold(True)
+    font.setPixelSize(26)
+    painter.setFont(font)
+    width = max(BADGE_HEIGHT, painter.fontMetrics().horizontalAdvance(text) + BADGE_PADDING)
+    rect = QRectF(ICON_SIZE - width, ICON_SIZE - BADGE_HEIGHT, width, BADGE_HEIGHT)
+    painter.setPen(Qt.PenStyle.NoPen)
+    painter.setBrush(QColor(color))
+    painter.drawRoundedRect(rect, BADGE_HEIGHT / 2, BADGE_HEIGHT / 2)
+    painter.setPen(QColor("white"))
+    painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, text)
+
+
+def render_icon(text: str, color: str | None, loading: bool) -> QIcon:
     pixmap = QPixmap(ICON_SIZE, ICON_SIZE)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    painter.setPen(Qt.PenStyle.NoPen)
-    painter.setBrush(QColor(color))
-    painter.drawEllipse(0, 0, ICON_SIZE, ICON_SIZE)
-    font = QFont()
-    font.setBold(True)
-    font.setPixelSize({1: 44, 2: 36}.get(len(text), 26))
-    painter.setFont(font)
-    painter.setPen(QColor("white"))
-    painter.drawText(QRectF(0, 0, ICON_SIZE, ICON_SIZE), Qt.AlignmentFlag.AlignCenter, text)
+    painter.setOpacity(LOADING_OPACITY if loading else 1.0)
+    painter.drawPixmap(0, 0, logo_pixmap())
+    painter.setOpacity(1.0)
+    if color:
+        draw_badge(painter, text, color)
     painter.end()
     return QIcon(pixmap)
 
@@ -78,18 +105,26 @@ class TrayIcon(QSystemTrayIcon):
     results_ready = pyqtSignal(list)
 
     def __init__(self, config: Config):
-        super().__init__(render_icon(GREY, ""))
+        super().__init__()
         self.config = config
         self.session = create_session(config.token)
         self.polling = False
         self.previous_urls: set[str] | None = None
+        self.loading = True
+        self.badge_text = ""
+        self.badge_color: str | None = None
+        self.update_icon()
         self.setToolTip(_("Checking GitHub…"))
         self.build_menu([])
         self.results_ready.connect(self.show_results)
         self.activated.connect(self.on_activated)
+        QGuiApplication.styleHints().colorSchemeChanged.connect(self.update_icon)
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.refresh)
         self.timer.start(config.poll_interval_minutes * 60_000)
+
+    def update_icon(self):
+        self.setIcon(render_icon(self.badge_text, self.badge_color, self.loading))
 
     def refresh(self):
         if self.polling:
@@ -104,7 +139,10 @@ class TrayIcon(QSystemTrayIcon):
         self.polling = False
         total = sum(len(status.pending) for status in statuses)
         has_error = any(status.error for status in statuses)
-        self.setIcon(render_icon(state_color(total, has_error), badge_text(total, has_error)))
+        self.loading = False
+        self.badge_text = badge_text(total, has_error)
+        self.badge_color = state_color(total, has_error)
+        self.update_icon()
         self.setToolTip(tooltip_text(statuses, datetime.now()))
         self.build_menu(statuses)
         self.notify_new(statuses)

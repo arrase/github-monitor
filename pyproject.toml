@@ -22,7 +22,7 @@ dev = ["pytest>=8", "Babel>=2.14"]
 github-monitor = "github_monitor.__main__:main"
 
 [tool.setuptools.package-data]
-github_monitor = ["locale/*/LC_MESSAGES/*.mo"]
+github_monitor = ["locale/*/LC_MESSAGES/*.mo", "assets/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

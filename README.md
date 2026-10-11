@@ -72,12 +72,14 @@ Tests: `.venv/bin/pytest`.
 
 ## Reading the icon
 
+The icon is the GitHub logo in your theme's text colour (white on dark panels, black on light ones); the state is shown by a badge in its bottom-right corner.
+
 | Icon | Meaning |
 |---|---|
-| Grey circle | First check in progress. |
-| Green circle | All clear. |
-| Orange circle with a number | Total pending pull requests and issues (`99+` above 99). |
-| Red circle | Some repository failed in the last check; shows the pending count, or `!` if there is none. |
+| Semi-transparent logo | First check in progress. |
+| Logo without badge | All clear. |
+| Orange badge with a number | Total pending pull requests and issues (`99+` above 99). |
+| Red badge | Some repository failed in the last check; shows the pending count, or `!` if there is none. |
 
 - **Tooltip**: per-repository summary (`org/app: 2 pull requests, 1 issue`) and time of the last check.
 - **Menu** (right click): one submenu per repository with pending items or errors; clicking `#number title` opens it in the browser. Also "Refresh now" and "Quit".
@@ -104,3 +106,5 @@ Try a language with `LANGUAGE=es .venv/bin/github-monitor`.
 ## License
 
 [MIT](LICENSE)
+
+The tray icon uses the `mark-github` icon from [Octicons](https://github.com/primer/octicons) (MIT, see `src/github_monitor/assets/LICENSE-octicons`). The GitHub logo is a trademark of GitHub, Inc. and is used unmodified, as a single-colour mark in the theme's light or dark text colour, following the [GitHub logo guidelines](https://github.com/logos).
