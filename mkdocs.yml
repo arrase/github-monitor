@@ -2,6 +2,7 @@ site_name: GitHub Monitor
 site_description: System tray monitor for open pull requests and unanswered issues on GitHub.
 site_author: Arrase
 site_url: https://arrase.github.io/github-monitor/
+docs_dir: gh-pages
 
 repo_name: arrase/github-monitor
 repo_url: https://github.com/arrase/github-monitor
