@@ -1,0 +1,94 @@
+# Arabic translations for github-monitor.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the github-monitor
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: github-monitor VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-11 16:08+0200\n"
+"PO-Revision-Date: 2026-10-12 01:08+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ar\n"
+"Language-Team: ar <LL@li.org>\n"
+"Plural-Forms: nplurals=6; plural=(n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : "
+"n%100>=3 && n%100<=10 ? 3 : n%100>=0 && n%100<=2 ? 4 : 5);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#, python-brace-format
+msgid "Configuration file not found: {path}"
+msgstr "لم يتم العثور على ملف التكوين: {path}"
+
+#, python-brace-format
+msgid "Missing required field '{field}' in {path}"
+msgstr "الحقل المطلوب '{field}' مفقود في {path}"
+
+#, python-brace-format
+msgid "Invalid repository '{repo}', expected 'owner/name'"
+msgstr "مستودع غير صالح '{repo}'، المتوقع 'owner/name'"
+
+#, python-brace-format
+msgid "{repo}: error: {error}"
+msgstr "{repo}: خطأ: {error}"
+
+#, python-brace-format
+msgid "{repo}: {pull_requests}, {issues}"
+msgstr "{repo}: {pull_requests}, {issues}"
+
+#, python-brace-format
+msgid "{count} pull request"
+msgid_plural "{count} pull requests"
+msgstr[0] "{count} طلب سحب"
+msgstr[1] "{count} طلب سحب"
+msgstr[2] "{count} طلبا سحب"
+msgstr[3] "{count} طلبات سحب"
+msgstr[4] "{count} طلب سحب"
+msgstr[5] "{count} طلب سحب"
+
+#, python-brace-format
+msgid "{count} issue"
+msgid_plural "{count} issues"
+msgstr[0] "{count} مشكلة"
+msgstr[1] "{count} مشكلة"
+msgstr[2] "{count} مشكلتان"
+msgstr[3] "{count} مشكلات"
+msgstr[4] "{count} مشكلة"
+msgstr[5] "{count} مشكلة"
+
+msgid "All clear"
+msgstr "كل شيء محدّث"
+
+#, python-brace-format
+msgid "Last update: {time}"
+msgstr "آخر تحديث: {time}"
+
+#, python-brace-format
+msgid "{count} new pending item on GitHub"
+msgid_plural "{count} new pending items on GitHub"
+msgstr[0] "{count} عنصر معلق جديد على GitHub"
+msgstr[1] "{count} عنصر معلق جديد على GitHub"
+msgstr[2] "{count} عنصران معلقان جديدان على GitHub"
+msgstr[3] "{count} عناصر معلقة جديدة على GitHub"
+msgstr[4] "{count} عنصراً معلقاً جديداً على GitHub"
+msgstr[5] "{count} عنصر معلق جديد على GitHub"
+
+msgid "Checking GitHub…"
+msgstr "جارٍ التحقق من GitHub…"
+
+msgid "Refresh now"
+msgstr "تحديث الآن"
+
+msgid "Quit"
+msgstr "خروج"
+
+msgid "Pull requests"
+msgstr "طلبات السحب"
+
+msgid "Issues"
+msgstr "المشكلات"
+

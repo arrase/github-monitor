@@ -24,7 +24,7 @@ The interface language SHALL be selected from the standard locale environment va
 - **THEN** the tooltip, menu, notifications and configuration errors are shown in Spanish
 
 #### Scenario: Unsupported locale
-- **WHEN** the application starts with `LANG=de_DE.UTF-8` and there is no German catalog
+- **WHEN** the application starts with `LANG=eo_EO.UTF-8` and there is no Esperanto catalog
 - **THEN** the interface is shown in English
 
 ### Requirement: Plural-aware messages
@@ -38,9 +38,9 @@ Messages that include a count SHALL use gettext plural forms so that every langu
 - **WHEN** a notification reports three new pending items
 - **THEN** its title uses the plural form in the active language
 
-### Requirement: Complete Spanish translation
-The application SHALL ship a Spanish (`es`) catalog that translates every translatable string, with no untranslated or fuzzy entries.
+### Requirement: Complete translation catalogs
+The application SHALL ship translation catalogs that translate every translatable string, with no untranslated or fuzzy entries.
 
 #### Scenario: Catalog completeness
-- **WHEN** the Spanish catalog is checked against the extracted template
+- **WHEN** a translation catalog is checked against the extracted template
 - **THEN** every message has a non-empty, non-fuzzy translation

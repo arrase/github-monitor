@@ -1,0 +1,81 @@
+# Finnish translations for github-monitor.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the github-monitor
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: github-monitor VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-11 16:08+0200\n"
+"PO-Revision-Date: 2026-10-12 01:08+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: fi\n"
+"Language-Team: fi <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#, python-brace-format
+msgid "Configuration file not found: {path}"
+msgstr "Asetustiedostoa ei löydy: {path}"
+
+#, python-brace-format
+msgid "Missing required field '{field}' in {path}"
+msgstr "Pakollinen kenttä '{field}' puuttuu polusta {path}"
+
+#, python-brace-format
+msgid "Invalid repository '{repo}', expected 'owner/name'"
+msgstr "Virheellinen tietovarasto '{repo}', odotettiin 'owner/name'"
+
+#, python-brace-format
+msgid "{repo}: error: {error}"
+msgstr "{repo}: virhe: {error}"
+
+#, python-brace-format
+msgid "{repo}: {pull_requests}, {issues}"
+msgstr "{repo}: {pull_requests}, {issues}"
+
+#, python-brace-format
+msgid "{count} pull request"
+msgid_plural "{count} pull requests"
+msgstr[0] "{count} pull request"
+msgstr[1] "{count} pull requestia"
+
+#, python-brace-format
+msgid "{count} issue"
+msgid_plural "{count} issues"
+msgstr[0] "{count} issue"
+msgstr[1] "{count} issuea"
+
+msgid "All clear"
+msgstr "Kaikki ajan tasalla"
+
+#, python-brace-format
+msgid "Last update: {time}"
+msgstr "Viimeisin päivitys: {time}"
+
+#, python-brace-format
+msgid "{count} new pending item on GitHub"
+msgid_plural "{count} new pending items on GitHub"
+msgstr[0] "{count} uusi odottava kohde GitHubissa"
+msgstr[1] "{count} uutta odottavaa kohdetta GitHubissa"
+
+msgid "Checking GitHub…"
+msgstr "Tarkistetaan GitHubia…"
+
+msgid "Refresh now"
+msgstr "Päivitä nyt"
+
+msgid "Quit"
+msgstr "Lopeta"
+
+msgid "Pull requests"
+msgstr "Pull requestit"
+
+msgid "Issues"
+msgstr "Issuet"
+

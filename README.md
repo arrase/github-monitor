@@ -88,7 +88,7 @@ The icon is the GitHub logo in your theme's text colour (white on dark panels, b
 
 ## Translations
 
-The interface is written in English and translated with gettext. The language follows the system locale (`LANGUAGE`, `LC_ALL`, `LC_MESSAGES`, `LANG`) and falls back to English. Available: Spanish (`es`).
+The interface is written in English and translated with gettext. The language follows the system locale (`LANGUAGE`, `LC_ALL`, `LC_MESSAGES`, `LANG`) and falls back to English. Available translations: Arabic (`ar`), Basque (`eu`), Catalan (`ca`), Chinese Simplified (`zh_CN`), Czech (`cs`), Danish (`da`), Dutch (`nl`), Finnish (`fi`), French (`fr`), Galician (`gl`), German (`de`), Greek (`el`), Hindi (`hi`), Hungarian (`hu`), Indonesian (`id`), Italian (`it`), Japanese (`ja`), Korean (`ko`), Norwegian (`no`), Polish (`pl`), Portuguese (`pt`), Romanian (`ro`), Russian (`ru`), Spanish (`es`), Swedish (`sv`), Turkish (`tr`), Ukrainian (`uk`).
 
 Catalogs live in `src/github_monitor/locale/`. After changing user-facing strings (requires the `dev` extra):
 

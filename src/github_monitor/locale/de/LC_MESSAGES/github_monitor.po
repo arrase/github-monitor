@@ -1,0 +1,81 @@
+# German translations for github-monitor.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the github-monitor
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: github-monitor VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-11 16:08+0200\n"
+"PO-Revision-Date: 2026-10-12 01:08+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: de\n"
+"Language-Team: de <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#, python-brace-format
+msgid "Configuration file not found: {path}"
+msgstr "Konfigurationsdatei nicht gefunden: {path}"
+
+#, python-brace-format
+msgid "Missing required field '{field}' in {path}"
+msgstr "Erforderliches Feld '{field}' fehlt in {path}"
+
+#, python-brace-format
+msgid "Invalid repository '{repo}', expected 'owner/name'"
+msgstr "Ungültiges Repository '{repo}', 'owner/name' erwartet"
+
+#, python-brace-format
+msgid "{repo}: error: {error}"
+msgstr "{repo}: Fehler: {error}"
+
+#, python-brace-format
+msgid "{repo}: {pull_requests}, {issues}"
+msgstr "{repo}: {pull_requests}, {issues}"
+
+#, python-brace-format
+msgid "{count} pull request"
+msgid_plural "{count} pull requests"
+msgstr[0] "{count} Pull Request"
+msgstr[1] "{count} Pull Requests"
+
+#, python-brace-format
+msgid "{count} issue"
+msgid_plural "{count} issues"
+msgstr[0] "{count} Issue"
+msgstr[1] "{count} Issues"
+
+msgid "All clear"
+msgstr "Alles erledigt"
+
+#, python-brace-format
+msgid "Last update: {time}"
+msgstr "Letzte Aktualisierung: {time}"
+
+#, python-brace-format
+msgid "{count} new pending item on GitHub"
+msgid_plural "{count} new pending items on GitHub"
+msgstr[0] "{count} neues ausstehendes Element auf GitHub"
+msgstr[1] "{count} neue ausstehende Elemente auf GitHub"
+
+msgid "Checking GitHub…"
+msgstr "GitHub wird überprüft…"
+
+msgid "Refresh now"
+msgstr "Jetzt aktualisieren"
+
+msgid "Quit"
+msgstr "Beenden"
+
+msgid "Pull requests"
+msgstr "Pull Requests"
+
+msgid "Issues"
+msgstr "Issues"
+

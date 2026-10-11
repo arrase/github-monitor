@@ -8,7 +8,23 @@ from babel.messages.pofile import read_po
 from github_monitor.i18n import DOMAIN, LOCALE_DIR
 
 TEMPLATE = LOCALE_DIR / f"{DOMAIN}.pot"
-SPANISH = LOCALE_DIR / "es" / "LC_MESSAGES" / f"{DOMAIN}.po"
+PO_FILES = sorted(LOCALE_DIR.glob("*/LC_MESSAGES/github_monitor.po"))
+
+
+@pytest.mark.parametrize("po_path", PO_FILES, ids=[p.parent.parent.name for p in PO_FILES])
+def test_catalog_is_complete(po_path):
+    with TEMPLATE.open("rb") as template_file, po_path.open("rb") as catalog_file:
+        template = read_po(template_file)
+        catalog = read_po(catalog_file)
+
+    for message in template:
+        if not message.id:
+            continue
+        translated = catalog[message.id]
+        assert translated is not None, f"Missing {message.id} in {po_path}"
+        assert not translated.fuzzy, f"Fuzzy {message.id} in {po_path}"
+        strings = translated.string if isinstance(translated.string, tuple) else (translated.string,)
+        assert all(strings), f"Empty translation for {message.id} in {po_path}"
 
 
 def run_in_language(language: str, code: str) -> list[str]:
@@ -18,26 +34,13 @@ def run_in_language(language: str, code: str) -> list[str]:
     return result.stdout.splitlines()
 
 
-def test_spanish_catalog_is_complete():
-    with TEMPLATE.open("rb") as template_file, SPANISH.open("rb") as spanish_file:
-        template = read_po(template_file)
-        spanish = read_po(spanish_file)
-
-    for message in template:
-        if not message.id:
-            continue
-        translated = spanish[message.id]
-        assert translated is not None, message.id
-        assert not translated.fuzzy, message.id
-        strings = translated.string if isinstance(translated.string, tuple) else (translated.string,)
-        assert all(strings), message.id
-
-
 @pytest.mark.parametrize(
     ("language", "expected"),
     [
         ("es", ["Salir", "1 nuevo elemento pendiente en GitHub", "3 nuevos elementos pendientes en GitHub"]),
-        ("de", ["Quit", "1 new pending item on GitHub", "3 new pending items on GitHub"]),
+        ("de", ["Beenden", "1 neues ausstehendes Element auf GitHub", "3 neue ausstehende Elemente auf GitHub"]),
+        ("fr", ["Quitter", "1 nouvel élément en attente sur GitHub", "3 nouveaux éléments en attente sur GitHub"]),
+        ("eo", ["Quit", "1 new pending item on GitHub", "3 new pending items on GitHub"]),
     ],
 )
 def test_language_follows_locale(language, expected):

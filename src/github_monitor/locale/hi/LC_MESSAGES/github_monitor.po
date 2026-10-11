@@ -1,0 +1,81 @@
+# Hindi translations for github-monitor.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the github-monitor
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: github-monitor VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-11 16:08+0200\n"
+"PO-Revision-Date: 2026-10-12 01:08+0200\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: hi\n"
+"Language-Team: hi <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#, python-brace-format
+msgid "Configuration file not found: {path}"
+msgstr "कॉन्फ़िगरेशन फ़ाइल नहीं मिली: {path}"
+
+#, python-brace-format
+msgid "Missing required field '{field}' in {path}"
+msgstr "{path} में आवश्यक फ़ील्ड '{field}' मौजूद नहीं है"
+
+#, python-brace-format
+msgid "Invalid repository '{repo}', expected 'owner/name'"
+msgstr "अमान्य रिपॉजिटरी '{repo}', 'owner/name' अपेक्षित था"
+
+#, python-brace-format
+msgid "{repo}: error: {error}"
+msgstr "{repo}: त्रुटि: {error}"
+
+#, python-brace-format
+msgid "{repo}: {pull_requests}, {issues}"
+msgstr "{repo}: {pull_requests}, {issues}"
+
+#, python-brace-format
+msgid "{count} pull request"
+msgid_plural "{count} pull requests"
+msgstr[0] "{count} पुल रिक्वेस्ट"
+msgstr[1] "{count} पुल रिक्वेस्ट"
+
+#, python-brace-format
+msgid "{count} issue"
+msgid_plural "{count} issues"
+msgstr[0] "{count} समस्या"
+msgstr[1] "{count} समस्याएँ"
+
+msgid "All clear"
+msgstr "सब कुछ अप-टू-डेट है"
+
+#, python-brace-format
+msgid "Last update: {time}"
+msgstr "अंतिम अपडेट: {time}"
+
+#, python-brace-format
+msgid "{count} new pending item on GitHub"
+msgid_plural "{count} new pending items on GitHub"
+msgstr[0] "GitHub पर {count} नया लंबित आइटम"
+msgstr[1] "GitHub पर {count} नए लंबित आइटम"
+
+msgid "Checking GitHub…"
+msgstr "GitHub की जाँच की जा रही है…"
+
+msgid "Refresh now"
+msgstr "अभी रीफ़्रेश करें"
+
+msgid "Quit"
+msgstr "बाहर निकलें"
+
+msgid "Pull requests"
+msgstr "पुल रिक्वेस्ट"
+
+msgid "Issues"
+msgstr "समस्याएँ"
+
