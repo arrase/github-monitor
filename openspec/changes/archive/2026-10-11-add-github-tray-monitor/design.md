@@ -63,7 +63,7 @@ Errors: `raise_for_status()` for HTTP and an exception when the response contain
 ### UI with PyQt6 `QSystemTrayIcon`
 PyQt6 is already available and `QSystemTrayIcon` uses StatusNotifierItem on KDE, offering a context menu and `showMessage` for notifications without extra dependencies. Alternatives: `pystray` (no native notifications, limited menus), AppIndicator/GTK (worse KDE integration).
 
-The icon is drawn at runtime with `QPainter` on a 64×64 `QPixmap`: a filled circle in the state colour and the badge text centred in bold white. The number is part of the icon itself, so it is visible in any panel without relying on desktop badge support. Pure functions `badge_text(total, has_error)` and `state_color(total, has_error)` keep it testable.
+The icon is drawn at runtime with `QPainter` on a 64×64 `QPixmap`: the GitHub logo in the theme's text colour with a rounded corner badge (orange or red) holding the count in bold white, and no badge when all is clear. The number is part of the icon itself, so it is visible in any panel without relying on desktop badge support. (The initial design drew a plain coloured circle; it was replaced by the logo in the archived change `github-logo-tray-icon`.) Pure functions `badge_text(total, has_error)` and `state_color(total, has_error)` keep it testable.
 
 The menu is published through DBusMenu and shown by the shell on right click. Left click (`activated` with `Trigger`) starts an immediate poll: on Wayland a `QMenu.popup()` without a focused parent window fails ("Failed to create grabbing popup") and Qt sets `ItemIsMenu=false`, so left click cannot be delegated to the shell. URLs open with `QDesktopServices.openUrl`.
 

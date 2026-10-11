@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "Babel>=2.14"]
+dev = ["pytest>=8", "pytest-cov>=5", "Babel>=2.14"]
 
 [project.scripts]
 github-monitor = "github_monitor.__main__:main"
@@ -26,3 +26,7 @@ github_monitor = ["locale/*/LC_MESSAGES/*.mo", "assets/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.coverage.run]
+source = ["github_monitor"]
+relative_files = true
