@@ -5,8 +5,6 @@ context: |
   source strings, README and all OpenSpec artifacts are written in English.
   Every user-facing string is internationalized with gettext (see the localization spec);
   the UI language follows the system locale and falls back to English.
-  Translations of the gettext catalogs are produced by delegating to subagents running the
-  "flash" model (cheaper); the main agent only extracts, reviews and compiles catalogs.
 
 # Project context (optional)
 # Add only constraints that should guide OpenSpec artifacts and workflows.
