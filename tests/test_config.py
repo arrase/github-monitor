@@ -39,12 +39,14 @@ def test_missing_file(tmp_path):
 @pytest.mark.parametrize("field", ["token", "repositories", "maintainers", "poll_interval_minutes"])
 def test_missing_field(tmp_path, field):
     content = "\n".join(line for line in VALID.splitlines() if not line.startswith(field))
+    path = write(tmp_path, content)
     with pytest.raises(ConfigError, match=field):
-        load_config(write(tmp_path, content))
+        load_config(path)
 
 
 @pytest.mark.parametrize("repo", ["noslash", "/name", "owner/", "a/b/c"])
 def test_invalid_repository(tmp_path, repo):
     content = VALID.replace('"org/private"', f'"{repo}"')
+    path = write(tmp_path, content)
     with pytest.raises(ConfigError, match=repo):
-        load_config(write(tmp_path, content))
+        load_config(path)
