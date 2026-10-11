@@ -14,7 +14,3 @@
 ## 3. Documentation
 
 - [x] 3.1 Update the "Reading the icon" table in `README.md` (semi-transparent logo, logo without badge, orange badge, red badge) and credit the Octicons logo and GitHub logo guidelines; verify the README matches the rendered PNGs
-
-## 4. Integration verification
-
-- [ ] 4.1 Reinstall with `pipx install --force .`, restart `github-monitor` and verify in the Plasma panel the loading logo, the badge with the pending count, the logo colour on the current theme, and that switching between Breeze Light and Breeze Dark repaints the logo
