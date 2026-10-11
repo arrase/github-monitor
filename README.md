@@ -100,3 +100,7 @@ Catalogs live in `src/github_monitor/locale/`. After changing user-facing string
 To add a language, replace `update` with `init -l <lang>`. Compiled `.mo` files are committed so a plain `pip install` works without Babel.
 
 Try a language with `LANGUAGE=es .venv/bin/github-monitor`.
+
+## License
+
+[MIT](LICENSE)
