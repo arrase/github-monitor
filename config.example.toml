@@ -1,0 +1,16 @@
+# Copy to ~/.config/github-monitor/config.toml and run: chmod 600 ~/.config/github-monitor/config.toml
+
+# GitHub token with read access to the repositories (classic: "repo" scope;
+# fine-grained: read-only "Issues" and "Pull requests").
+token = "ghp_your_token_here"
+
+# Minutes between checks.
+poll_interval_minutes = 5
+
+# Logins whose reply marks an issue as answered (case-insensitive).
+maintainers = ["arrase"]
+
+# Repositories to monitor, as "owner/name". Public and private are supported.
+repositories = [
+    "arrase/github-monitor",
+]

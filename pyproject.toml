@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "github-monitor"
+version = "0.1.0"
+description = "System tray monitor for open pull requests and unanswered issues on GitHub"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "PyQt6>=6.6",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "Babel>=2.14"]
+
+[project.scripts]
+github-monitor = "github_monitor.__main__:main"
+
+[tool.setuptools.package-data]
+github_monitor = ["locale/*/LC_MESSAGES/*.mo"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
