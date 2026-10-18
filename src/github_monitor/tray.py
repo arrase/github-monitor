@@ -28,11 +28,11 @@ def badge_text(total: int, has_error: bool) -> str:
     return "!" if has_error else ""
 
 
-def state_color(total: int, has_error: bool) -> str | None:
-    """Badge colour, or None when there is nothing to report."""
+def state_color(total: int, has_error: bool) -> str:
+    """Badge colour, or empty string when there is nothing to report."""
     if has_error:
         return RED
-    return ORANGE if total else None
+    return ORANGE if total else ""
 
 
 def tooltip_text(statuses: list[RepoStatus], updated_at: datetime) -> str:
@@ -48,24 +48,12 @@ def tooltip_text(statuses: list[RepoStatus], updated_at: datetime) -> str:
                 pull_requests=ngettext("{count} pull request", "{count} pull requests", pull_requests).format(count=pull_requests),
                 issues=ngettext("{count} issue", "{count} issues", issues).format(count=issues),
             ))
-    summary = "\n".join(lines) or _("All clear")
+    summary = "\n".join(lines) if lines else _("All clear")
     return summary + "\n" + _("Last update: {time}").format(time=f"{updated_at:%H:%M}")
 
 
 def notification_title(count: int) -> str:
     return ngettext("{count} new pending item on GitHub", "{count} new pending items on GitHub", count).format(count=count)
-
-
-def logo_pixmap() -> QPixmap:
-    pixmap = QPixmap(ICON_SIZE, ICON_SIZE)
-    pixmap.fill(Qt.GlobalColor.transparent)
-    painter = QPainter(pixmap)
-    QSvgRenderer(str(LOGO_PATH)).render(painter, QRectF(0, 0, ICON_SIZE, ICON_SIZE))
-    # SourceIn keeps the logo's shape and repaints it in the theme text colour.
-    painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
-    painter.fillRect(pixmap.rect(), QApplication.palette().color(QPalette.ColorRole.WindowText))
-    painter.end()
-    return pixmap
 
 
 def draw_badge(painter: QPainter, text: str, color: str):
@@ -82,23 +70,32 @@ def draw_badge(painter: QPainter, text: str, color: str):
     painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, text)
 
 
-def render_icon(text: str, color: str | None, loading: bool) -> QIcon:
+def render_icon(text: str, color: str, loading: bool) -> QIcon:
     pixmap = QPixmap(ICON_SIZE, ICON_SIZE)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
     painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-    painter.setOpacity(LOADING_OPACITY if loading else 1.0)
-    painter.drawPixmap(0, 0, logo_pixmap())
-    painter.setOpacity(1.0)
+    QSvgRenderer(str(LOGO_PATH)).render(painter, QRectF(0, 0, ICON_SIZE, ICON_SIZE))
+    # SourceIn keeps the logo's shape and repaints it in the theme text colour.
+    logo_color = QApplication.palette().color(QPalette.ColorRole.WindowText)
+    if loading:
+        logo_color.setAlphaF(LOADING_OPACITY)
+    painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceIn)
+    painter.fillRect(pixmap.rect(), logo_color)
     if color:
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceOver)
         draw_badge(painter, text, color)
     painter.end()
     return QIcon(pixmap)
 
 
-def menu_label(item: Item) -> str:
+def escape_ampersand(text: str) -> str:
     # A single "&" marks a keyboard mnemonic in Qt menus.
-    return f"#{item.number} {item.title}".replace("&", "&&")
+    return text.replace("&", "&&")
+
+
+def menu_label(item: Item) -> str:
+    return escape_ampersand(f"#{item.number} {item.title}")
 
 
 class TrayIcon(QSystemTrayIcon):
@@ -109,10 +106,10 @@ class TrayIcon(QSystemTrayIcon):
         self.config = config
         self.session = create_session(config.token)
         self.polling = False
-        self.previous_urls: set[str] | None = None
+        self.previous_urls: dict[str, set[str]] = {}
         self.loading = True
         self.badge_text = ""
-        self.badge_color: str | None = None
+        self.badge_color = ""
         self.update_icon()
         self.setToolTip(_("Checking GitHub…"))
         self.build_menu([])
@@ -161,7 +158,7 @@ class TrayIcon(QSystemTrayIcon):
     def add_repo_menu(self, status: RepoStatus):
         submenu = self.menu.addMenu(f"{status.repo} ({len(status.pending)})")
         if status.error:
-            submenu.addAction(status.error.replace("&", "&&")).setEnabled(False)
+            submenu.addAction(escape_ampersand(status.error)).setEnabled(False)
         for title, items in ((_("Pull requests"), status.pull_requests), (_("Issues"), status.issues)):
             if items:
                 submenu.addSection(title)
@@ -169,13 +166,16 @@ class TrayIcon(QSystemTrayIcon):
                 submenu.addAction(menu_label(item), lambda url=item.url: QDesktopServices.openUrl(QUrl(url)))
 
     def notify_new(self, statuses: list[RepoStatus]):
-        pending = [item for status in statuses for item in status.pending]
-        if self.previous_urls is not None:
-            new_items = [item for item in pending if item.url not in self.previous_urls]
-            if new_items:
-                body = "\n".join(f"{item.repo} #{item.number} {item.title}" for item in new_items)
-                self.showMessage(notification_title(len(new_items)), body)
-        self.previous_urls = {item.url for item in pending}
+        new_items = []
+        for status in statuses:
+            if status.error:
+                continue
+            if status.repo in self.previous_urls:
+                new_items.extend(item for item in status.pending if item.url not in self.previous_urls[status.repo])
+            self.previous_urls[status.repo] = {item.url for item in status.pending}
+        if new_items:
+            body = "\n".join(f"{item.repo} #{item.number} {item.title}" for item in new_items)
+            self.showMessage(notification_title(len(new_items)), body)
 
     def on_activated(self, reason: QSystemTrayIcon.ActivationReason):
         # Wayland refuses QMenu popups without a focused parent window, so the
