@@ -5,7 +5,6 @@ from pathlib import Path
 from github_monitor.i18n import _
 
 CONFIG_PATH = Path.home() / ".config" / "github-monitor" / "config.toml"
-REQUIRED_FIELDS = ("token", "repositories", "maintainers", "poll_interval_minutes")
 
 
 class ConfigError(Exception):
@@ -25,7 +24,7 @@ def load_config(path: Path) -> Config:
         raise ConfigError(_("Configuration file not found: {path}").format(path=path))
     data = tomllib.loads(path.read_text())
 
-    for field in REQUIRED_FIELDS:
+    for field in Config.__dataclass_fields__:
         if field not in data:
             raise ConfigError(_("Missing required field '{field}' in {path}").format(field=field, path=path))
 

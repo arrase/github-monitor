@@ -41,7 +41,6 @@ class GitHubError(Exception):
 @dataclass(frozen=True)
 class Item:
     repo: str
-    kind: str
     number: int
     title: str
     url: str
@@ -52,22 +51,18 @@ class RepoStatus:
     repo: str
     pull_requests: list[Item] = field(default_factory=list)
     issues: list[Item] = field(default_factory=list)
-    error: str | None = None
+    error: str = ""
 
     @property
     def pending(self) -> list[Item]:
         return self.pull_requests + self.issues
 
 
-def needs_attention(last_author: str | None, maintainers: frozenset[str]) -> bool:
-    """`last_author` is None when GitHub reports a deleted user ("ghost")."""
-    return last_author is None or last_author.lower() not in maintainers
-
-
-def last_author(issue: dict) -> str | None:
+def needs_attention(issue: dict, maintainers: frozenset[str]) -> bool:
+    """Author is None when GitHub reports a deleted user ("ghost")."""
     comments = issue["comments"]["nodes"]
     author = comments[0]["author"] if comments else issue["author"]
-    return author["login"] if author else None
+    return not author or author["login"].lower() not in maintainers
 
 
 def fetch_nodes(session: requests.Session, repo: str, query: str, connection: str) -> list[dict]:
@@ -88,8 +83,8 @@ def fetch_nodes(session: requests.Session, repo: str, query: str, connection: st
         after = page["pageInfo"]["endCursor"]
 
 
-def to_item(repo: str, kind: str, node: dict) -> Item:
-    return Item(repo=repo, kind=kind, number=node["number"], title=node["title"], url=node["url"])
+def to_item(repo: str, node: dict) -> Item:
+    return Item(repo=repo, number=node["number"], title=node["title"], url=node["url"])
 
 
 def fetch_repo_status(session: requests.Session, repo: str, maintainers: frozenset[str]) -> RepoStatus:
@@ -97,8 +92,8 @@ def fetch_repo_status(session: requests.Session, repo: str, maintainers: frozens
     issues = fetch_nodes(session, repo, ISSUES_QUERY, "issues")
     return RepoStatus(
         repo=repo,
-        pull_requests=[to_item(repo, "pr", node) for node in pull_requests],
-        issues=[to_item(repo, "issue", node) for node in issues if needs_attention(last_author(node), maintainers)],
+        pull_requests=[to_item(repo, node) for node in pull_requests],
+        issues=[to_item(repo, node) for node in issues if needs_attention(node, maintainers)],
     )
 
 
