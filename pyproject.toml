@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8", "pytest-cov>=7.1.0", "Babel>=2.18.0"]
+dev = ["pytest>=9.1.1", "pytest-cov>=7.1.0", "Babel>=2.18.0"]
 
 [project.scripts]
 github-monitor = "github_monitor.__main__:main"
