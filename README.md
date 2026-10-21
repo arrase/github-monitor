@@ -1,15 +1,16 @@
 # github-monitor
 
-[![Quality Gate Status](https://img.shields.io/sonar/quality_gate/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
-[![Coverage](https://img.shields.io/sonar/coverage/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
-[![Bugs](https://img.shields.io/sonar/bugs/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
-[![Vulnerabilities](https://img.shields.io/sonar/vulnerabilities/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
-[![Code Smells](https://img.shields.io/sonar/code_smells/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
-[![Tech Debt](https://img.shields.io/sonar/tech_debt/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
-[![Duplicated Lines](https://img.shields.io/sonar/duplicated_lines_density/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
-[![Security Rating](https://img.shields.io/sonar/security_rating/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
-[![Reliability Rating](https://img.shields.io/sonar/reliability_rating/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
-[![Maintainability Rating](https://img.shields.io/sonar/sqale_rating/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&logo=sonarcloud)](https://sonarcloud.io/summary/new_code?id=arrase_github-monitor)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=alert_status)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=coverage)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=bugs)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=vulnerabilities)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=code_smells)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=sqale_index)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=duplicated_lines_density)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=security_rating)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=reliability_rating)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=sqale_rating)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=arrase_github-monitor&metric=ncloc)](https://sonarcloud.io/summary/overall?id=arrase_github-monitor)
 
 System tray icon that monitors GitHub repositories (public and private) and tells you about open pull requests and issues waiting for a reply.
 
