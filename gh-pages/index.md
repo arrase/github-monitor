@@ -17,6 +17,18 @@ hide:
     <a href="https://docs.github.com/en/graphql"><img src="https://img.shields.io/badge/API-GitHub%20GraphQL-181717.svg" alt="GitHub GraphQL"></a>
     <a href="https://github.com/arrase/github-monitor/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
   </div>
+  <div class="hero-badges">
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/quality_gate/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Quality Gate Status"></a>
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/coverage/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Coverage"></a>
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/bugs/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Bugs"></a>
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/vulnerabilities/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Vulnerabilities"></a>
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/code_smells/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Code Smells"></a>
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/tech_debt/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Tech Debt"></a>
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/duplicated_lines_density/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Duplicated Lines"></a>
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/security_rating/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Security Rating"></a>
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/reliability_rating/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Reliability Rating"></a>
+    <a href="https://sonarcloud.io/summary/new_code?id=arrase_github-monitor"><img src="https://img.shields.io/sonar/sqale_rating/arrase_github-monitor?server=https%3A%2F%2Fsonarcloud.io&amp;logo=sonarcloud" alt="Maintainability Rating"></a>
+  </div>
 </div>
 
 <div class="section-header">
