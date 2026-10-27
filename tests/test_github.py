@@ -73,7 +73,9 @@ def test_issue_filtering_by_last_responder():
         issue(4, "Arrase"),
         issue(5, "arrase", ""),
     ]
-    session = FakeSession({("o/r", "pullRequests"): [page("pullRequests", [])], ("o/r", "issues"): [page("issues", issues)]})
+    session = FakeSession(
+        {("o/r", "pullRequests"): [page("pullRequests", [])], ("o/r", "issues"): [page("issues", issues)]}
+    )
 
     [status] = fetch_all(config("o/r"), session)
 
@@ -81,10 +83,12 @@ def test_issue_filtering_by_last_responder():
 
 
 def test_pagination_collects_all_pages():
-    session = FakeSession({
-        ("o/r", "pullRequests"): [page("pullRequests", [pr(1)], "c1"), page("pullRequests", [pr(2)])],
-        ("o/r", "issues"): [page("issues", [issue(3, "x")], "c1"), page("issues", [issue(4, "y")])],
-    })
+    session = FakeSession(
+        {
+            ("o/r", "pullRequests"): [page("pullRequests", [pr(1)], "c1"), page("pullRequests", [pr(2)])],
+            ("o/r", "issues"): [page("issues", [issue(3, "x")], "c1"), page("issues", [issue(4, "y")])],
+        }
+    )
 
     [status] = fetch_all(config("o/r"), session)
 
@@ -94,11 +98,13 @@ def test_pagination_collects_all_pages():
 
 def test_error_is_isolated_per_repository():
     not_found = {"data": {"repository": None}, "errors": [{"message": "Could not resolve to a Repository"}]}
-    session = FakeSession({
-        ("o/missing", "pullRequests"): [not_found],
-        ("o/r", "pullRequests"): [page("pullRequests", [pr(1)])],
-        ("o/r", "issues"): [page("issues", [])],
-    })
+    session = FakeSession(
+        {
+            ("o/missing", "pullRequests"): [not_found],
+            ("o/r", "pullRequests"): [page("pullRequests", [pr(1)])],
+            ("o/r", "issues"): [page("issues", [])],
+        }
+    )
 
     missing, ok = fetch_all(config("o/missing", "o/r"), session)
 
