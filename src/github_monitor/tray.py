@@ -43,17 +43,23 @@ def tooltip_text(statuses: list[RepoStatus], updated_at: datetime) -> str:
         elif status.pending:
             pull_requests = len(status.pull_requests)
             issues = len(status.issues)
-            lines.append(_("{repo}: {pull_requests}, {issues}").format(
-                repo=status.repo,
-                pull_requests=ngettext("{count} pull request", "{count} pull requests", pull_requests).format(count=pull_requests),
-                issues=ngettext("{count} issue", "{count} issues", issues).format(count=issues),
-            ))
+            lines.append(
+                _("{repo}: {pull_requests}, {issues}").format(
+                    repo=status.repo,
+                    pull_requests=ngettext("{count} pull request", "{count} pull requests", pull_requests).format(
+                        count=pull_requests
+                    ),
+                    issues=ngettext("{count} issue", "{count} issues", issues).format(count=issues),
+                )
+            )
     summary = "\n".join(lines) if lines else _("All clear")
     return summary + "\n" + _("Last update: {time}").format(time=f"{updated_at:%H:%M}")
 
 
 def notification_title(count: int) -> str:
-    return ngettext("{count} new pending item on GitHub", "{count} new pending items on GitHub", count).format(count=count)
+    return ngettext("{count} new pending item on GitHub", "{count} new pending items on GitHub", count).format(
+        count=count
+    )
 
 
 def draw_badge(painter: QPainter, text: str, color: str):
@@ -166,7 +172,7 @@ class TrayIcon(QSystemTrayIcon):
                 submenu.addAction(menu_label(item), lambda url=item.url: QDesktopServices.openUrl(QUrl(url)))
 
     def notify_new(self, statuses: list[RepoStatus]):
-        new_items = []
+        new_items: list[Item] = []
         for status in statuses:
             if status.error:
                 continue
