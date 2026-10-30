@@ -6,7 +6,7 @@ from github_monitor.config import CONFIG_PATH, ConfigError, load_config
 from github_monitor.tray import TrayIcon
 
 
-def main():
+def main() -> None:
     try:
         config = load_config(CONFIG_PATH)
     except ConfigError as exc:

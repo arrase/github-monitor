@@ -5,6 +5,7 @@ from pathlib import Path
 from github_monitor.i18n import _
 
 CONFIG_PATH = Path.home() / ".config" / "github-monitor" / "config.toml"
+REPO_SLUG_PARTS = 2
 
 
 class ConfigError(Exception):
@@ -30,7 +31,7 @@ def load_config(path: Path) -> Config:
 
     for repo in data["repositories"]:
         parts = repo.split("/")
-        if len(parts) != 2 or not all(parts):
+        if len(parts) != REPO_SLUG_PARTS or not all(parts):
             raise ConfigError(_("Invalid repository '{repo}', expected 'owner/name'").format(repo=repo))
 
     return Config(

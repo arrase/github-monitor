@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Any
 
 import requests
 
@@ -58,16 +59,16 @@ class RepoStatus:
         return self.pull_requests + self.issues
 
 
-def needs_attention(issue: dict, maintainers: frozenset[str]) -> bool:
+def needs_attention(issue: dict[str, Any], maintainers: frozenset[str]) -> bool:
     """Author is None when GitHub reports a deleted user ("ghost")."""
     comments = issue["comments"]["nodes"]
     author = comments[0]["author"] if comments else issue["author"]
     return not author or author["login"].lower() not in maintainers
 
 
-def fetch_nodes(session: requests.Session, repo: str, query: str, connection: str) -> list[dict]:
+def fetch_nodes(session: requests.Session, repo: str, query: str, connection: str) -> list[dict[str, Any]]:
     owner, name = repo.split("/")
-    nodes = []
+    nodes: list[dict[str, Any]] = []
     after = None
     while True:
         variables = {"owner": owner, "name": name, "after": after}
@@ -83,7 +84,7 @@ def fetch_nodes(session: requests.Session, repo: str, query: str, connection: st
         after = page["pageInfo"]["endCursor"]
 
 
-def to_item(repo: str, node: dict) -> Item:
+def to_item(repo: str, node: dict[str, Any]) -> Item:
     return Item(repo=repo, number=node["number"], title=node["title"], url=node["url"])
 
 

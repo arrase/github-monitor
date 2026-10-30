@@ -18,26 +18,26 @@ def write(tmp_path: Path, content: str) -> Path:
     return path
 
 
-def test_valid_config(tmp_path):
+def test_valid_config(tmp_path: Path) -> None:
     config = load_config(write(tmp_path, VALID))
     assert config.token == "secret"
     assert config.poll_interval_minutes == 5
     assert config.repositories == ["arrase/github-monitor", "org/private"]
 
 
-def test_maintainers_are_case_insensitive(tmp_path):
+def test_maintainers_are_case_insensitive(tmp_path: Path) -> None:
     config = load_config(write(tmp_path, VALID))
     assert config.maintainers == frozenset({"arrase", "bob"})
 
 
-def test_missing_file(tmp_path):
+def test_missing_file(tmp_path: Path) -> None:
     path = tmp_path / "missing.toml"
     with pytest.raises(ConfigError, match=str(path)):
         load_config(path)
 
 
 @pytest.mark.parametrize("field", ["token", "repositories", "maintainers", "poll_interval_minutes"])
-def test_missing_field(tmp_path, field):
+def test_missing_field(tmp_path: Path, field: str) -> None:
     content = "\n".join(line for line in VALID.splitlines() if not line.startswith(field))
     path = write(tmp_path, content)
     with pytest.raises(ConfigError, match=field):
@@ -45,7 +45,7 @@ def test_missing_field(tmp_path, field):
 
 
 @pytest.mark.parametrize("repo", ["noslash", "/name", "owner/", "a/b/c"])
-def test_invalid_repository(tmp_path, repo):
+def test_invalid_repository(tmp_path: Path, repo: str) -> None:
     content = VALID.replace('"org/private"', f'"{repo}"')
     path = write(tmp_path, content)
     with pytest.raises(ConfigError, match=repo):
