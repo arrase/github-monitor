@@ -1,3 +1,5 @@
+from typing import Any
+
 import pytest
 import requests
 
@@ -8,42 +10,42 @@ MAINTAINERS = frozenset({"arrase"})
 
 
 class FakeResponse:
-    def __init__(self, payload: dict):
+    def __init__(self, payload: dict[str, Any]) -> None:
         self.payload = payload
 
-    def raise_for_status(self):
+    def raise_for_status(self) -> None:
         pass
 
-    def json(self) -> dict:
+    def json(self) -> dict[str, Any]:
         return self.payload
 
 
 class FakeSession:
     """Serves queued GraphQL pages per (repo, connection)."""
 
-    def __init__(self, pages: dict[tuple[str, str], list[dict]]):
+    def __init__(self, pages: dict[tuple[str, str], list[dict[str, Any]]]) -> None:
         self.pages = pages
 
-    def post(self, url, json, timeout):
+    def post(self, _url: str, json: dict[str, Any], **_kwargs: Any) -> FakeResponse:
         repo = f"{json['variables']['owner']}/{json['variables']['name']}"
         connection = "pullRequests" if "pullRequests" in json["query"] else "issues"
         return FakeResponse(self.pages[(repo, connection)].pop(0))
 
 
-def page(connection: str, nodes: list[dict], end_cursor: str = "") -> dict:
+def page(connection: str, nodes: list[dict[str, Any]], end_cursor: str = "") -> dict[str, Any]:
     page_info = {"hasNextPage": bool(end_cursor), "endCursor": end_cursor}
     return {"data": {"repository": {connection: {"pageInfo": page_info, "nodes": nodes}}}}
 
 
-def pr(number: int) -> dict:
+def pr(number: int) -> dict[str, Any]:
     return {"number": number, "title": f"PR {number}", "url": f"https://github.com/o/r/pull/{number}"}
 
 
-def actor(login: str):
+def actor(login: str) -> dict[str, str] | None:
     return {"login": login} if login else None
 
 
-def issue(number: int, author: str, *commenters: str) -> dict:
+def issue(number: int, author: str, *commenters: str) -> dict[str, Any]:
     return {
         "number": number,
         "title": f"Issue {number}",
@@ -61,11 +63,11 @@ def config(*repos: str) -> Config:
     ("author", "expected"),
     [("arrase", False), ("ARRASE", False), ("stranger", True), ("", True)],
 )
-def test_needs_attention(author, expected):
+def test_needs_attention(author: str, *, expected: bool) -> None:
     assert needs_attention(issue(1, author), MAINTAINERS) is expected
 
 
-def test_issue_filtering_by_last_responder():
+def test_issue_filtering_by_last_responder() -> None:
     issues = [
         issue(1, "stranger", "arrase"),
         issue(2, "arrase", "stranger"),
@@ -82,7 +84,7 @@ def test_issue_filtering_by_last_responder():
     assert [item.number for item in status.issues] == [2, 3, 5]
 
 
-def test_pagination_collects_all_pages():
+def test_pagination_collects_all_pages() -> None:
     session = FakeSession(
         {
             ("o/r", "pullRequests"): [page("pullRequests", [pr(1)], "c1"), page("pullRequests", [pr(2)])],
@@ -96,7 +98,7 @@ def test_pagination_collects_all_pages():
     assert [item.number for item in status.issues] == [3, 4]
 
 
-def test_error_is_isolated_per_repository():
+def test_error_is_isolated_per_repository() -> None:
     not_found = {"data": {"repository": None}, "errors": [{"message": "Could not resolve to a Repository"}]}
     session = FakeSession(
         {
@@ -114,9 +116,9 @@ def test_error_is_isolated_per_repository():
     assert len(ok.pending) == 1
 
 
-def test_network_error_is_reported():
+def test_network_error_is_reported() -> None:
     class BrokenSession:
-        def post(self, url, json, timeout):
+        def post(self, *_args: Any, **_kwargs: Any) -> None:
             raise requests.ConnectionError("offline")
 
     [status] = fetch_all(config("o/r"), BrokenSession())
@@ -124,7 +126,7 @@ def test_network_error_is_reported():
     assert status.error == "offline"
 
 
-def test_create_session_sets_authorization_header():
+def test_create_session_sets_authorization_header() -> None:
     session = create_session("secret")
 
     assert session.headers["Authorization"] == "Bearer secret"

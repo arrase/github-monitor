@@ -1,6 +1,7 @@
 import os
 import subprocess
 import sys
+from pathlib import Path
 
 import pytest
 from babel.messages.pofile import read_po
@@ -12,7 +13,7 @@ PO_FILES = sorted(LOCALE_DIR.glob("*/LC_MESSAGES/github_monitor.po"))
 
 
 @pytest.mark.parametrize("po_path", PO_FILES, ids=[p.parent.parent.name for p in PO_FILES])
-def test_catalog_is_complete(po_path):
+def test_catalog_is_complete(po_path: Path) -> None:
     with TEMPLATE.open("rb") as template_file, po_path.open("rb") as catalog_file:
         template = read_po(template_file)
         catalog = read_po(catalog_file)
@@ -43,7 +44,7 @@ def run_in_language(language: str, code: str) -> list[str]:
         ("eo", ["Quit", "1 new pending item on GitHub", "3 new pending items on GitHub"]),
     ],
 )
-def test_language_follows_locale(language, expected):
+def test_language_follows_locale(language: str, expected: list[str]) -> None:
     code = (
         "from github_monitor.i18n import _\n"
         "from github_monitor.tray import notification_title\n"

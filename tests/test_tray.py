@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 
 import pytest
 from PyQt6.QtGui import QColor
@@ -19,7 +19,7 @@ from github_monitor.tray import (
     tooltip_text,
 )
 
-UPDATED_AT = datetime(2026, 10, 11, 15, 30)
+UPDATED_AT = datetime(2026, 10, 11, 15, 30, tzinfo=UTC)
 CONFIG = Config(token="t", repositories=["org/app"], maintainers=frozenset(), poll_interval_minutes=5)
 
 
@@ -31,19 +31,19 @@ def item(number: int) -> Item:
     ("total", "has_error", "expected"),
     [(0, False, ""), (5, False, "5"), (120, False, "99+"), (0, True, "!"), (3, True, "3")],
 )
-def test_badge_text(total, has_error, expected):
-    assert badge_text(total, has_error) == expected
+def test_badge_text(total: int, *, has_error: bool, expected: str) -> None:
+    assert badge_text(total, has_error=has_error) == expected
 
 
 @pytest.mark.parametrize(
     ("total", "has_error", "expected"),
     [(0, False, ""), (2, False, ORANGE), (0, True, RED), (2, True, RED)],
 )
-def test_state_color(total, has_error, expected):
-    assert state_color(total, has_error) == expected
+def test_state_color(total: int, *, has_error: bool, expected: str) -> None:
+    assert state_color(total, has_error=has_error) == expected
 
 
-def test_tooltip_lists_only_repos_needing_attention():
+def test_tooltip_lists_only_repos_needing_attention() -> None:
     statuses = [
         RepoStatus("org/app", pull_requests=[item(1), item(2)], issues=[item(3)]),
         RepoStatus("org/quiet"),
@@ -58,19 +58,19 @@ def test_tooltip_lists_only_repos_needing_attention():
     assert "15:30" in text
 
 
-def test_tooltip_all_clear():
+def test_tooltip_all_clear() -> None:
     text = tooltip_text([RepoStatus("org/quiet")], UPDATED_AT)
 
     assert "All clear" in text
     assert "15:30" in text
 
 
-def test_menu_label_escapes_ampersand():
+def test_menu_label_escapes_ampersand() -> None:
     assert menu_label(Item("o/r", 7, "Fix A & B", "u")) == "#7 Fix A && B"
 
 
-@pytest.fixture(scope="module")
-def qapp():
+@pytest.fixture(scope="module", autouse=True)
+def qapp() -> QApplication:
     return QApplication([])
 
 
@@ -79,20 +79,20 @@ BADGE_PROBE = (ICON_SIZE - BADGE_HEIGHT + 6, ICON_SIZE - BADGE_HEIGHT // 2)
 
 
 @pytest.mark.parametrize(("text", "color"), [("5", ORANGE), ("!", RED)])
-def test_render_icon_draws_badge(qapp, text, color):
+def test_render_icon_draws_badge(text: str, color: str) -> None:
     image = render_icon(text, color, loading=False).pixmap(ICON_SIZE, ICON_SIZE).toImage()
     assert image.pixelColor(*BADGE_PROBE) == QColor(color)
 
 
 @pytest.mark.parametrize("loading", [True, False])
-def test_render_icon_without_badge(qapp, loading):
-    image = render_icon("", "", loading).pixmap(ICON_SIZE, ICON_SIZE).toImage()
+def test_render_icon_without_badge(*, loading: bool) -> None:
+    image = render_icon("", "", loading=loading).pixmap(ICON_SIZE, ICON_SIZE).toImage()
     assert image.pixelColor(*BADGE_PROBE) not in (QColor(ORANGE), QColor(RED))
 
 
-def test_notify_new_only_notifies_new_items_after_initial_poll(qapp, monkeypatch):
+def test_notify_new_only_notifies_new_items_after_initial_poll(monkeypatch: pytest.MonkeyPatch) -> None:
     tray = TrayIcon(CONFIG)
-    messages = []
+    messages: list[tuple[str, str]] = []
     monkeypatch.setattr(tray, "showMessage", lambda title, body: messages.append((title, body)))
 
     tray.notify_new([RepoStatus("org/app", pull_requests=[item(1)])])
@@ -102,9 +102,9 @@ def test_notify_new_only_notifies_new_items_after_initial_poll(qapp, monkeypatch
     assert messages == [("1 new pending item on GitHub", "org/app #2 t2")]
 
 
-def test_notify_new_ignores_failed_polls(qapp, monkeypatch):
+def test_notify_new_ignores_failed_polls(monkeypatch: pytest.MonkeyPatch) -> None:
     tray = TrayIcon(CONFIG)
-    messages = []
+    messages: list[tuple[str, str]] = []
     monkeypatch.setattr(tray, "showMessage", lambda title, body: messages.append((title, body)))
 
     tray.notify_new([RepoStatus("org/app", error="offline")])
@@ -115,7 +115,7 @@ def test_notify_new_ignores_failed_polls(qapp, monkeypatch):
     assert messages == []
 
 
-def test_build_menu_populates_pending_and_error_submenus(qapp):
+def test_build_menu_populates_pending_and_error_submenus() -> None:
     tray = TrayIcon(CONFIG)
     statuses = [
         RepoStatus("org/app", pull_requests=[item(1)], issues=[item(2)]),

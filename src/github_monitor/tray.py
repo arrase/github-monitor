@@ -16,19 +16,20 @@ RED = "#c62828"
 ICON_SIZE = 64
 BADGE_HEIGHT = 34
 BADGE_PADDING = 12
+MAX_BADGE_COUNT = 99
 LOADING_OPACITY = 0.4
 LOGO_PATH = Path(__file__).parent / "assets" / "github-mark.svg"
 
 
-def badge_text(total: int, has_error: bool) -> str:
-    if total > 99:
+def badge_text(total: int, *, has_error: bool) -> str:
+    if total > MAX_BADGE_COUNT:
         return "99+"
     if total:
         return str(total)
     return "!" if has_error else ""
 
 
-def state_color(total: int, has_error: bool) -> str:
+def state_color(total: int, *, has_error: bool) -> str:
     """Badge colour, or empty string when there is nothing to report."""
     if has_error:
         return RED
@@ -62,7 +63,7 @@ def notification_title(count: int) -> str:
     )
 
 
-def draw_badge(painter: QPainter, text: str, color: str):
+def draw_badge(painter: QPainter, text: str, color: str) -> None:
     font = QFont()
     font.setBold(True)
     font.setPixelSize(26)
@@ -76,7 +77,7 @@ def draw_badge(painter: QPainter, text: str, color: str):
     painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, text)
 
 
-def render_icon(text: str, color: str, loading: bool) -> QIcon:
+def render_icon(text: str, color: str, *, loading: bool) -> QIcon:
     pixmap = QPixmap(ICON_SIZE, ICON_SIZE)
     pixmap.fill(Qt.GlobalColor.transparent)
     painter = QPainter(pixmap)
@@ -107,7 +108,7 @@ def menu_label(item: Item) -> str:
 class TrayIcon(QSystemTrayIcon):
     results_ready = pyqtSignal(list)
 
-    def __init__(self, config: Config):
+    def __init__(self, config: Config) -> None:
         super().__init__()
         self.config = config
         self.session = create_session(config.token)
@@ -126,31 +127,31 @@ class TrayIcon(QSystemTrayIcon):
         self.timer.timeout.connect(self.refresh)
         self.timer.start(config.poll_interval_minutes * 60_000)
 
-    def update_icon(self):
-        self.setIcon(render_icon(self.badge_text, self.badge_color, self.loading))
+    def update_icon(self) -> None:
+        self.setIcon(render_icon(self.badge_text, self.badge_color, loading=self.loading))
 
-    def refresh(self):
+    def refresh(self) -> None:
         if self.polling:
             return
         self.polling = True
         threading.Thread(target=self.poll, daemon=True).start()
 
-    def poll(self):
+    def poll(self) -> None:
         self.results_ready.emit(fetch_all(self.config, self.session))
 
-    def show_results(self, statuses: list[RepoStatus]):
+    def show_results(self, statuses: list[RepoStatus]) -> None:
         self.polling = False
         total = sum(len(status.pending) for status in statuses)
         has_error = any(status.error for status in statuses)
         self.loading = False
-        self.badge_text = badge_text(total, has_error)
-        self.badge_color = state_color(total, has_error)
+        self.badge_text = badge_text(total, has_error=has_error)
+        self.badge_color = state_color(total, has_error=has_error)
         self.update_icon()
-        self.setToolTip(tooltip_text(statuses, datetime.now()))
+        self.setToolTip(tooltip_text(statuses, datetime.now().astimezone()))
         self.build_menu(statuses)
         self.notify_new(statuses)
 
-    def build_menu(self, statuses: list[RepoStatus]):
+    def build_menu(self, statuses: list[RepoStatus]) -> None:
         self.menu = QMenu()
         for status in statuses:
             if status.pending or status.error:
@@ -161,7 +162,7 @@ class TrayIcon(QSystemTrayIcon):
         self.menu.addAction(_("Quit"), QApplication.quit)
         self.setContextMenu(self.menu)
 
-    def add_repo_menu(self, status: RepoStatus):
+    def add_repo_menu(self, status: RepoStatus) -> None:
         submenu = self.menu.addMenu(f"{status.repo} ({len(status.pending)})")
         if status.error:
             submenu.addAction(escape_ampersand(status.error)).setEnabled(False)
@@ -171,7 +172,7 @@ class TrayIcon(QSystemTrayIcon):
             for item in items:
                 submenu.addAction(menu_label(item), lambda url=item.url: QDesktopServices.openUrl(QUrl(url)))
 
-    def notify_new(self, statuses: list[RepoStatus]):
+    def notify_new(self, statuses: list[RepoStatus]) -> None:
         new_items: list[Item] = []
         for status in statuses:
             if status.error:
@@ -183,7 +184,7 @@ class TrayIcon(QSystemTrayIcon):
             body = "\n".join(f"{item.repo} #{item.number} {item.title}" for item in new_items)
             self.showMessage(notification_title(len(new_items)), body)
 
-    def on_activated(self, reason: QSystemTrayIcon.ActivationReason):
+    def on_activated(self, reason: QSystemTrayIcon.ActivationReason) -> None:
         # Wayland refuses QMenu popups without a focused parent window, so the
         # menu is left to the shell (right click) and left click refreshes.
         if reason == QSystemTrayIcon.ActivationReason.Trigger:
