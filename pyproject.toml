@@ -11,7 +11,8 @@ license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.12"
 dependencies = [
-    "PyQt6>=6.11.0",
+    # PyQt6 6.12.0 ships broken QtGui.pyi stubs (`*args, /` syntax error).
+    "PyQt6>=6.11.0,<6.12.0",
     "requests>=2.34.2",
 ]
 
