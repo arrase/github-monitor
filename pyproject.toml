@@ -24,7 +24,7 @@ test = [
 ]
 dev = [
     "github-monitor[test]",
-    "ruff==0.17.4",
+    "ruff==0.17.5",
     "mypy>=2.4.1",
 ]
 
